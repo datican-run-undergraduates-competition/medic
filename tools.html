@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Health Analysis Tools - MedAI Pro</title>
+    <meta name="description" content="Access AI-powered health analysis tools for medical diagnostics and assessment">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- CSS Files -->
+    <link rel="stylesheet" href="styles/global.css">
+    <link rel="stylesheet" href="styles/tools.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <div class="logo">
+                    <span class="logo-icon">M</span>
+                </div>
+                <span class="brand-name">MedAI Pro</span>
+            </div>
+
+            <!-- Desktop Navigation -->
+            <div class="nav-menu" id="nav-menu">
+                <a href="index.html" class="nav-link">
+                    <span class="nav-icon">🏠</span>
+                    Home
+                </a>
+                <a href="chat.html" class="nav-link">
+                    <span class="nav-icon">💬</span>
+                    AI Chat
+                </a>
+                <a href="tools.html" class="nav-link active">
+                    <span class="nav-icon">🔬</span>
+                    Analysis Tools
+                </a>
+                <a href="education.html" class="nav-link">
+                    <span class="nav-icon">📚</span>
+                    Education
+                </a>
+                <button class="btn btn-primary">Sign Up</button>
+            </div>
+
+            <!-- Mobile menu button -->
+            <div class="nav-toggle" id="nav-toggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <main class="tools-main">
+        <!-- Tools Dashboard -->
+        <div class="tools-dashboard" id="tools-dashboard">
+            <div class="container">
+                <div class="section-header">
+                    <h1 class="section-title">Health Analysis Tools</h1>
+                    <p class="section-subtitle">Access our suite of AI-powered diagnostic and analysis tools</p>
+                </div>
+
+                <div class="tools-grid">
+                    <div class="tool-card" data-tool="posture">
+                        <div class="tool-icon">🏃‍♂️</div>
+                        <h3 class="tool-title">Postural Analysis</h3>
+                        <p class="tool-description">AI-powered spine and posture assessment from photos</p>
+                        <div class="tool-meta">
+                            <span class="file-types">JPEG, PNG</span>
+                            <span class="tool-link">Open Tool →</span>
+                        </div>
+                    </div>
+
+                    <div class="tool-card" data-tool="stroke">
+                        <div class="tool-icon">🧠</div>
+                        <h3 class="tool-title">Stroke Assessment</h3>
+                        <p class="tool-description">Hand-eye coordination and motor function analysis</p>
+                        <div class="tool-meta">
+                            <span class="file-types">MP4, WebM</span>
+                            <span class="tool-link">Open Tool →</span>
+                        </div>
+                    </div>
+
+                    <div class="tool-card" data-tool="skin">
+                        <div class="tool-icon">🔬</div>
+                        <h3 class="tool-title">Skin Condition Analysis</h3>
+                        <p class="tool-description">Dermatological assessment and lesion detection</p>
+                        <div class="tool-meta">
+                            <span class="file-types">JPEG, PNG</span>
+                            <span class="tool-link">Open Tool →</span>
+                        </div>
+                    </div>
+
+                    <div class="tool-card" data-tool="gait">
+                        <div class="tool-icon">👣</div>
+                        <h3 class="tool-title">Gait Analysis</h3>
+                        <p class="tool-description">Walking pattern and mobility assessment</p>
+                        <div class="tool-meta">
+                            <span class="file-types">MP4, WebM</span>
+                            <span class="tool-link">Open Tool →</span>
+                        </div>
+                    </div>
+
+                    <div class="tool-card" data-tool="respiratory">
+                        <div class="tool-icon">🫁</div>
+                        <h3 class="tool-title">Respiratory Analysis</h3>
+                        <p class="tool-description">Breathing pattern and lung function assessment</p>
+                        <div class="tool-meta">
+                            <span class="file-types">WAV, MP3</span>
+                            <span class="tool-link">Open Tool →</span>
+                        </div>
+                    </div>
+
+                    <div class="tool-card" data-tool="cardiac">
+                        <div class="tool-icon">❤️</div>
+                        <h3 class="tool-title">Cardiac Rhythm Analysis</h3>
+                        <p class="tool-description">Heart rate variability and rhythm assessment</p>
+                        <div class="tool-meta">
+                            <span class="file-types">WAV, MP3</span>
+                            <span class="tool-link">Open Tool →</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tool Interface -->
+        <div class="tool-interface" id="tool-interface" style="display: none;">
+            <div class="container">
+                <!-- Tool Header -->
+                <div class="tool-header">
+                    <div class="tool-info">
+                        <button class="back-btn" id="back-btn">← Back</button>
+                        <div class="current-tool-icon" id="current-tool-icon">🏃‍♂️</div>
+                        <div class="tool-details">
+                            <h1 class="tool-name" id="current-tool-name">Postural Analysis</h1>
+                            <p class="tool-desc" id="current-tool-desc">AI-powered spine and posture assessment from photos</p>
+                        </div>
+                    </div>
+                    <button class="btn btn-primary" id="save-results">Save Results</button>
+                </div>
+
+                <!-- Upload Section -->
+                <div class="upload-section" id="upload-section">
+                    <div class="upload-card">
+                        <h2 class="upload-title">Upload File</h2>
+                        <div class="upload-area" id="upload-area">
+                            <div class="upload-icon">📁</div>
+                            <p class="upload-text">Drag and drop your file here, or click to browse</p>
+                            <p class="upload-formats" id="upload-formats">Supported formats: JPEG, PNG</p>
+                            <input type="file" id="file-input" class="file-input" accept="image/*">
+                            <button class="btn btn-primary" id="browse-btn">Choose File</button>
+                        </div>
+                        
+                        <div class="file-preview" id="file-preview" style="display: none;">
+                            <div class="preview-info">
+                                <div class="file-details">
+                                    <p class="file-name" id="file-name">File uploaded:</p>
+                                    <p class="file-size" id="file-size"></p>
+                                </div>
+                                <button class="btn btn-primary" id="analyze-btn">Start Analysis</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Processing Section -->
+                <div class="processing-section" id="processing-section" style="display: none;">
+                    <div class="processing-card">
+                        <div class="processing-content">
+                            <div class="spinner"></div>
+                            <h3 class="processing-title">Analyzing...</h3>
+                            <p class="processing-text">Please wait while we process your file</p>
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="progress-fill"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Results Section -->
+                <div class="results-section" id="results-section" style="display: none;">
+                    <div class="results-card">
+                        <h2 class="results-title">Analysis Results</h2>
+                        <div class="results-content">
+                            <div class="findings-section">
+                                <h3 class="findings-title">Key Findings</h3>
+                                <ul class="findings-list" id="findings-list">
+                                    <!-- Findings will be populated by JavaScript -->
+                                </ul>
+                            </div>
+                            <div class="recommendations-section">
+                                <h3 class="recommendations-title">Recommendations</h3>
+                                <ul class="recommendations-list" id="recommendations-list">
+                                    <!-- Recommendations will be populated by JavaScript -->
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="confidence-score">
+                            <span class="confidence-label">Confidence Score:</span>
+                            <span class="confidence-value" id="confidence-value">95%</span>
+                        </div>
+                    </div>
+
+                    <div class="results-actions">
+                        <button class="btn btn-secondary" id="new-analysis-btn">New Analysis</button>
+                        <button class="btn btn-primary" id="download-report-btn">Download Report</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="scripts/global.js"></script>
+    <script src="scripts/tools.js"></script>
+</body>
+</html>

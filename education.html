@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medical Education - MedAI Pro</title>
+    <meta name="description" content="Access medical education resources, articles, videos, and tutorials">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- CSS Files -->
+    <link rel="stylesheet" href="styles/global.css">
+    <link rel="stylesheet" href="styles/education.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <div class="logo">
+                    <span class="logo-icon">M</span>
+                </div>
+                <span class="brand-name">MedAI Pro</span>
+            </div>
+
+            <!-- Desktop Navigation -->
+            <div class="nav-menu" id="nav-menu">
+                <a href="index.html" class="nav-link">
+                    <span class="nav-icon">🏠</span>
+                    Home
+                </a>
+                <a href="chat.html" class="nav-link">
+                    <span class="nav-icon">💬</span>
+                    AI Chat
+                </a>
+                <a href="tools.html" class="nav-link">
+                    <span class="nav-icon">🔬</span>
+                    Analysis Tools
+                </a>
+                <a href="education.html" class="nav-link active">
+                    <span class="nav-icon">📚</span>
+                    Education
+                </a>
+                <button class="btn btn-primary">Sign Up</button>
+            </div>
+
+            <!-- Mobile menu button -->
+            <div class="nav-toggle" id="nav-toggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <main class="education-main">
+        <!-- Education Dashboard -->
+        <div class="education-dashboard" id="education-dashboard">
+            <div class="container">
+                <!-- Header -->
+                <div class="section-header">
+                    <h1 class="section-title">Medical Education Resources</h1>
+                    <p class="section-subtitle">Stay updated with the latest medical research, guidelines, and educational content</p>
+                </div>
+
+                <!-- Search and Filters -->
+                <div class="search-section">
+                    <div class="search-container">
+                        <input 
+                            type="text" 
+                            id="search-input" 
+                            class="search-input" 
+                            placeholder="Search articles, videos, and tutorials..."
+                        >
+                        <button class="search-btn" id="search-btn">🔍</button>
+                    </div>
+                    <div class="filters">
+                        <button class="filter-btn active" data-filter="all">All Resources</button>
+                        <button class="filter-btn" data-filter="cardiology">Cardiology</button>
+                        <button class="filter-btn" data-filter="neurology">Neurology</button>
+                        <button class="filter-btn" data-filter="dermatology">Dermatology</button>
+                        <button class="filter-btn" data-filter="pediatrics">Pediatrics</button>
+                        <button class="filter-btn" data-filter="emergency">Emergency Medicine</button>
+                    </div>
+                </div>
+
+                <!-- Resources Grid -->
+                <div class="resources-grid" id="resources-grid">
+                    <!-- Resources will be populated by JavaScript -->
+                </div>
+
+                <!-- Popular Resources Sidebar -->
+                <div class="popular-section">
+                    <h3 class="popular-title">Popular This Week</h3>
+                    <div class="popular-resources" id="popular-resources">
+                        <!-- Popular resources will be populated by JavaScript -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Resource Viewer -->
+        <div class="resource-viewer" id="resource-viewer" style="display: none;">
+            <div class="container">
+                <div class="viewer-content">
+                    <div class="viewer-header">
+                        <button class="back-btn" id="viewer-back-btn">← Back to Resources</button>
+                        <div class="resource-info">
+                            <span class="resource-type-icon" id="viewer-type-icon">📄</span>
+                            <div class="resource-details">
+                                <h1 class="resource-title" id="viewer-title">Resource Title</h1>
+                                <p class="resource-meta" id="viewer-meta">By Author • Duration</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="viewer-image">
+                        <img id="viewer-image" src="/placeholder.svg?height=400&width=800" alt="Resource thumbnail" class="resource-image">
+                    </div>
+
+                    <div class="viewer-body">
+                        <div class="resource-description">
+                            <p id="viewer-description">Resource description will appear here...</p>
+                        </div>
+
+                        <div class="learning-objectives">
+                            <h3 class="objectives-title">Key Learning Objectives</h3>
+                            <ul class="objectives-list">
+                                <li>Understand the latest evidence-based practices</li>
+                                <li>Apply clinical guidelines in real-world scenarios</li>
+                                <li>Recognize critical decision points</li>
+                                <li>Implement best practices for patient safety</li>
+                            </ul>
+                        </div>
+
+                        <div class="content-preview">
+                            <h3 class="preview-title">Content Preview</h3>
+                            <p class="preview-text">
+                                This comprehensive resource covers the essential aspects of the topic with 
+                                practical examples and case studies. The content is regularly updated to 
+                                reflect the latest medical research and clinical guidelines.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="viewer-actions">
+                        <button class="btn btn-primary btn-large" id="access-content-btn">Read Full Article</button>
+                        <button class="btn btn-secondary" id="save-later-btn">Save for Later</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="scripts/global.js"></script>
+    <script src="scripts/education.js"></script>
+</body>
+</html>

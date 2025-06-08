@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Chat - MedAI Pro</title>
+    <meta name="description" content="Chat with our AI medical assistant for instant medical insights and guidance">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- CSS Files -->
+    <link rel="stylesheet" href="styles/global.css">
+    <link rel="stylesheet" href="styles/chat.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <div class="logo">
+                    <span class="logo-icon">M</span>
+                </div>
+                <span class="brand-name">MedAI Pro</span>
+            </div>
+
+            <!-- Desktop Navigation -->
+            <div class="nav-menu" id="nav-menu">
+                <a href="index.html" class="nav-link">
+                    <span class="nav-icon">🏠</span>
+                    Home
+                </a>
+                <a href="chat.html" class="nav-link active">
+                    <span class="nav-icon">💬</span>
+                    AI Chat
+                </a>
+                <a href="tools.html" class="nav-link">
+                    <span class="nav-icon">🔬</span>
+                    Analysis Tools
+                </a>
+                <a href="education.html" class="nav-link">
+                    <span class="nav-icon">📚</span>
+                    Education
+                </a>
+                <button class="btn btn-primary">Sign Up</button>
+            </div>
+
+            <!-- Mobile menu button -->
+            <div class="nav-toggle" id="nav-toggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <main class="chat-main">
+        <div class="chat-container">
+            <!-- Main Chat Area -->
+            <div class="chat-area">
+                <!-- Chat Header -->
+                <div class="chat-header">
+                    <div class="chat-info">
+                        <h1 class="chat-title">AI Medical Assistant</h1>
+                        <p class="chat-subtitle">Get instant medical insights and guidance</p>
+                    </div>
+                    <div class="chat-actions">
+                        <button class="btn btn-secondary" id="clear-chat">Clear Chat</button>
+                        <button class="btn btn-primary" id="voice-btn">🎤 Voice</button>
+                    </div>
+                </div>
+
+                <!-- Messages Area -->
+                <div class="messages-container" id="messages-container">
+                    <div class="message ai-message">
+                        <div class="message-content">
+                            <p>Hello! I'm your AI medical assistant. How can I help you today?</p>
+                            <span class="message-time">Just now</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Loading Indicator -->
+                <div class="loading-message" id="loading-message" style="display: none;">
+                    <div class="message-content">
+                        <div class="typing-indicator">
+                            <div class="typing-dot"></div>
+                            <div class="typing-dot"></div>
+                            <div class="typing-dot"></div>
+                        </div>
+                        <span class="message-time">AI is thinking...</span>
+                    </div>
+                </div>
+
+                <!-- Input Area -->
+                <div class="chat-input-area">
+                    <div class="input-container">
+                        <textarea 
+                            id="message-input" 
+                            placeholder="Ask about a diagnosis, treatment, or medical procedure..."
+                            rows="2"
+                        ></textarea>
+                        <button class="send-btn" id="send-btn">
+                            <span class="send-icon">→</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sidebar -->
+            <div class="chat-sidebar">
+                <div class="sidebar-section">
+                    <h3 class="sidebar-title">Quick Actions</h3>
+                    <div class="quick-actions">
+                        <button class="quick-action-btn" data-action="Differential diagnosis for chest pain">
+                            <span class="action-icon">🔍</span>
+                            Differential diagnosis for chest pain
+                        </button>
+                        <button class="quick-action-btn" data-action="Drug interactions checker">
+                            <span class="action-icon">💊</span>
+                            Drug interactions checker
+                        </button>
+                        <button class="quick-action-btn" data-action="Latest COVID-19 guidelines">
+                            <span class="action-icon">🦠</span>
+                            Latest COVID-19 guidelines
+                        </button>
+                        <button class="quick-action-btn" data-action="Pediatric dosage calculator">
+                            <span class="action-icon">👶</span>
+                            Pediatric dosage calculator
+                        </button>
+                    </div>
+                </div>
+
+                <div class="sidebar-section">
+                    <h3 class="sidebar-title">Suggested Resources</h3>
+                    <div class="resource-cards">
+                        <div class="resource-card clinical">
+                            <h4 class="resource-title">Clinical Guidelines</h4>
+                            <p class="resource-description">Latest evidence-based protocols</p>
+                        </div>
+                        <div class="resource-card drug">
+                            <h4 class="resource-title">Drug Database</h4>
+                            <p class="resource-description">Comprehensive medication info</p>
+                        </div>
+                        <div class="resource-card emergency">
+                            <h4 class="resource-title">Emergency Protocols</h4>
+                            <p class="resource-description">Critical care procedures</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="scripts/global.js"></script>
+    <script src="scripts/chat.js"></script>
+</body>
+</html>

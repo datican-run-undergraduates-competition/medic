@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MedAI Pro - AI-Powered Healthcare Platform</title>
+    <meta name="description" content="Empower your medical practice with AI-driven healthcare tools, analysis, and education resources">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- CSS Files -->
+    <link rel="stylesheet" href="styles/global.css">
+    <link rel="stylesheet" href="styles/landing.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <div class="logo">
+                    <span class="logo-icon">M</span>
+                </div>
+                <span class="brand-name">MedAI Pro</span>
+            </div>
+
+            <!-- Desktop Navigation -->
+            <div class="nav-menu" id="nav-menu">
+                <a href="index.html" class="nav-link active">
+                    <span class="nav-icon">🏠</span>
+                    Home
+                </a>
+                <a href="chat.html" class="nav-link">
+                    <span class="nav-icon">💬</span>
+                    AI Chat
+                </a>
+                <a href="tools.html" class="nav-link">
+                    <span class="nav-icon">🔬</span>
+                    Analysis Tools
+                </a>
+                <a href="education.html" class="nav-link">
+                    <span class="nav-icon">📚</span>
+                    Education
+                </a>
+                <button class="btn btn-primary">Sign Up</button>
+            </div>
+
+            <!-- Mobile menu button -->
+            <div class="nav-toggle" id="nav-toggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <main>
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="container">
+                <div class="hero-content">
+                    <h1 class="hero-title">
+                        Empower Your Practice with
+                        <span class="text-accent">AI-Driven</span>
+                        Healthcare Tools
+                    </h1>
+                    <p class="hero-description">
+                        Transform your medical practice with cutting-edge AI technology. 
+                        Access intelligent diagnostic tools, get instant medical insights, 
+                        and stay ahead with continuous education.
+                    </p>
+                    <div class="hero-buttons">
+                        <a href="chat.html" class="btn btn-primary btn-large">Get Started</a>
+                        <a href="tools.html" class="btn btn-secondary btn-large">Explore Tools</a>
+                    </div>
+                </div>
+                <div class="hero-image">
+                    <div class="hero-blob">
+                        <div class="blob-content">
+                            <span class="blob-icon">🏥</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section class="features">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">Comprehensive Healthcare AI Platform</h2>
+                    <p class="section-subtitle">Everything you need to enhance patient care and streamline your practice</p>
+                </div>
+                
+                <div class="features-grid">
+                    <div class="feature-card" onclick="window.location.href='chat.html'">
+                        <div class="feature-icon">🤖</div>
+                        <h3 class="feature-title">AI Medical Assistant</h3>
+                        <p class="feature-description">Get instant answers to medical queries with our advanced AI chatbot trained on medical literature.</p>
+                        <div class="feature-link">Learn More →</div>
+                    </div>
+                    
+                    <div class="feature-card" onclick="window.location.href='tools.html'">
+                        <div class="feature-icon">🔬</div>
+                        <h3 class="feature-title">Health Analysis Tools</h3>
+                        <p class="feature-description">Access 6 ML-powered diagnostic tools for postural analysis, stroke assessment, and more.</p>
+                        <div class="feature-link">Learn More →</div>
+                    </div>
+                    
+                    <div class="feature-card" onclick="window.location.href='education.html'">
+                        <div class="feature-icon">📚</div>
+                        <h3 class="feature-title">Medical Education</h3>
+                        <p class="feature-description">Stay updated with the latest medical research, articles, and educational resources.</p>
+                        <div class="feature-link">Learn More →</div>
+                    </div>
+                    
+                    <div class="feature-card" onclick="window.location.href='tools.html'">
+                        <div class="feature-icon">📊</div>
+                        <h3 class="feature-title">Data Insights</h3>
+                        <p class="feature-description">Visualize patient data and analysis results with interactive charts and reports.</p>
+                        <div class="feature-link">Learn More →</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Stats Section -->
+        <section class="stats">
+            <div class="container">
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <div class="stat-number" data-target="10000">0</div>
+                        <div class="stat-label">Healthcare Professionals</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number" data-target="1000000">0</div>
+                        <div class="stat-label">Analyses Completed</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number" data-target="99">0</div>
+                        <div class="stat-label">Accuracy Rate</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <div class="footer-logo">
+                        <div class="logo">
+                            <span class="logo-icon">M</span>
+                        </div>
+                        <span class="brand-name">MedAI Pro</span>
+                    </div>
+                    <p class="footer-description">Advancing healthcare through AI innovation</p>
+                </div>
+                
+                <div class="footer-links">
+                    <div class="footer-group">
+                        <h4>Platform</h4>
+                        <ul>
+                            <li><a href="chat.html">AI Chat</a></li>
+                            <li><a href="tools.html">Analysis Tools</a></li>
+                            <li><a href="education.html">Education</a></li>
+                        </ul>
+                    </div>
+                    
+                    <div class="footer-group">
+                        <h4>Company</h4>
+                        <ul>
+                            <li><a href="#">About</a></li>
+                            <li><a href="#">Contact</a></li>
+                            <li><a href="#">Careers</a></li>
+                        </ul>
+                    </div>
+                    
+                    <div class="footer-group">
+                        <h4>Legal</h4>
+                        <ul>
+                            <li><a href="#">Privacy Policy</a></li>
+                            <li><a href="#">Terms of Service</a></li>
+                            <li><a href="#">HIPAA Compliance</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2024 MedAI Pro. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="scripts/global.js"></script>
+    <script src="scripts/landing.js"></script>
+</body>
+</html>
