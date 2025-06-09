@@ -6,13 +6,79 @@ let analysisResult = null
 
 // Tool configurations
 const toolsConfig = {
+  // Notebook-based tools
+  "posture-notebook": {
+    id: "posture-notebook",
+    title: "Posture Analysis (Notebook)",
+    description: "Advanced posture analysis using Jupyter notebook implementation",
+    icon: "📊",
+    notebookPath: "Jupyter Notebooks/Postureanalysis.ipynb",
+    type: "notebook"
+  },
+  "squats-notebook": {
+    id: "squats-notebook",
+    title: "Squat Analysis (Notebook)",
+    description: "Detailed squat form analysis with Jupyter notebook",
+    icon: "🏋️‍♂️",
+    notebookPath: "Jupyter Notebooks/Squats.ipynb",
+    type: "notebook"
+  },
+  "pushups-notebook": {
+    id: "pushups-notebook",
+    title: "Push-up Analysis (Notebook)",
+    description: "Advanced push-up form analysis using Jupyter notebook",
+    icon: "💪",
+    notebookPath: "Jupyter Notebooks/PushUp Analysis.ipynb",
+    type: "notebook"
+  },
+  "rehabilitation-notebook": {
+    id: "rehabilitation-notebook",
+    title: "Movement Rehabilitation (Notebook)",
+    description: "Movement pattern analysis with Jupyter notebook",
+    icon: "🏥",
+    notebookPath: "Jupyter Notebooks/Movehabilitation.ipynb",
+    type: "notebook"
+  },
+  // Original tools
   posture: {
     id: "posture",
-    title: "Postural Analysis",
-    description: "AI-powered spine and posture assessment from photos",
-    icon: "🏃‍♂️",
-    fileTypes: ["image/jpeg", "image/png"],
-    acceptAttribute: "image/*",
+    title: "Posture Analysis",
+    description: "AI-powered spine and posture assessment with real-time feedback",
+    icon: "🧘‍♂️",
+    fileTypes: ["video/mp4", "video/webm"],
+    acceptAttribute: "video/*",
+    analysisType: "real-time",
+    requiresCamera: true
+  },
+  squats: {
+    id: "squats",
+    title: "Squat Analysis",
+    description: "Form and technique analysis for squats with correction guidance",
+    icon: "🏋️‍♂️",
+    fileTypes: ["video/mp4", "video/webm"],
+    acceptAttribute: "video/*",
+    analysisType: "real-time",
+    requiresCamera: true
+  },
+  pushups: {
+    id: "pushups",
+    title: "Push-up Analysis",
+    description: "Push-up form assessment and technique improvement",
+    icon: "💪",
+    fileTypes: ["video/mp4", "video/webm"],
+    acceptAttribute: "video/*",
+    analysisType: "real-time",
+    requiresCamera: true
+  },
+  rehabilitation: {
+    id: "rehabilitation",
+    title: "Movement Rehabilitation",
+    description: "Movement pattern analysis and rehabilitation guidance",
+    icon: "🏥",
+    fileTypes: ["video/mp4", "video/webm"],
+    acceptAttribute: "video/*",
+    analysisType: "real-time",
+    requiresCamera: true
   },
   stroke: {
     id: "stroke",
@@ -128,7 +194,13 @@ function openTool(toolId) {
   currentTool = toolsConfig[toolId]
   if (!currentTool) return
 
-  // Update tool interface
+  // Handle notebook-based tools
+  if (currentTool.type === "notebook") {
+    openNotebookTool(currentTool)
+    return
+  }
+
+  // Update tool interface for regular tools
   document.getElementById("current-tool-icon").textContent = currentTool.icon
   document.getElementById("current-tool-name").textContent = currentTool.title
   document.getElementById("current-tool-desc").textContent = currentTool.description
@@ -143,6 +215,72 @@ function openTool(toolId) {
 
   // Reset state
   resetToolState()
+}
+
+// Handle notebook-based tools
+function openNotebookTool(tool) {
+  // Create notebook interface
+  const notebookInterface = document.createElement("div")
+  notebookInterface.className = "notebook-interface"
+  notebookInterface.innerHTML = `
+    <div class="notebook-header">
+      <button class="back-btn" id="notebook-back-btn">← Back</button>
+      <div class="notebook-info">
+        <div class="notebook-icon">${tool.icon}</div>
+        <div class="notebook-details">
+          <h1>${tool.title}</h1>
+          <p>${tool.description}</p>
+        </div>
+      </div>
+    </div>
+    <div class="notebook-content">
+      <div class="notebook-actions">
+        <button class="btn btn-primary" id="run-notebook-btn">Run Notebook</button>
+        <button class="btn btn-secondary" id="download-notebook-btn">Download Notebook</button>
+      </div>
+      <div class="notebook-preview">
+        <iframe id="notebook-preview-frame" src="about:blank"></iframe>
+      </div>
+    </div>
+  `
+
+  // Replace dashboard with notebook interface
+  toolsDashboard.style.display = "none"
+  document.querySelector(".tools-main").appendChild(notebookInterface)
+
+  // Setup event listeners
+  document.getElementById("notebook-back-btn").addEventListener("click", () => {
+    notebookInterface.remove()
+    toolsDashboard.style.display = "block"
+  })
+
+  document.getElementById("run-notebook-btn").addEventListener("click", () => {
+    runNotebook(tool.notebookPath)
+  })
+
+  document.getElementById("download-notebook-btn").addEventListener("click", () => {
+    downloadNotebook(tool.notebookPath)
+  })
+}
+
+// Run notebook
+function runNotebook(notebookPath) {
+  // Here you would implement the logic to run the notebook
+  // This could involve:
+  // 1. Starting a Jupyter server
+  // 2. Opening the notebook in a new window/tab
+  // 3. Or integrating with a notebook viewer
+  window.open(`http://localhost:8888/notebooks/${notebookPath}`, "_blank")
+}
+
+// Download notebook
+function downloadNotebook(notebookPath) {
+  const link = document.createElement("a")
+  link.href = notebookPath
+  link.download = notebookPath.split("/").pop()
+  document.body.appendChild(link)
+  link.click()
+  document.body.removeChild(link)
 }
 
 // Close tool and return to dashboard

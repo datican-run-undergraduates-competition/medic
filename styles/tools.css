@@ -6,6 +6,78 @@
   background-color: var(--gray-50);
 }
 
+/* Notebook Tools */
+.notebook-tool {
+  border-left: 4px solid var(--primary-color);
+}
+
+.notebook-tool .tool-icon {
+  color: var(--primary-color);
+}
+
+.notebook-interface {
+  padding: var(--spacing-xl) 0;
+}
+
+.notebook-header {
+  background-color: var(--white);
+  border-radius: var(--border-radius-lg);
+  padding: var(--spacing-xl);
+  margin-bottom: var(--spacing-lg);
+  box-shadow: var(--box-shadow);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.notebook-info {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+.notebook-icon {
+  font-size: 2.5rem;
+}
+
+.notebook-details h1 {
+  font-size: var(--font-size-2xl);
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: var(--spacing-xs);
+}
+
+.notebook-details p {
+  color: var(--text-secondary);
+  font-size: var(--font-size-base);
+}
+
+.notebook-content {
+  background-color: var(--white);
+  border-radius: var(--border-radius-lg);
+  padding: var(--spacing-xl);
+  box-shadow: var(--box-shadow);
+}
+
+.notebook-actions {
+  display: flex;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-lg);
+}
+
+.notebook-preview {
+  border: 1px solid var(--gray-200);
+  border-radius: var(--border-radius);
+  overflow: hidden;
+  height: 600px;
+}
+
+#notebook-preview-frame {
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
 /* Tools Dashboard */
 .tools-dashboard {
   padding: var(--spacing-xl) 0;
