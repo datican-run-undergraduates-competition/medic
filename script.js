@@ -8,287 +8,337 @@ const scrollTopBtn = document.getElementById("scroll-top")
 const contactForm = document.getElementById("contact-form")
 const statNumbers = document.querySelectorAll(".stat__number")
 
-// Mobile Navigation
+// Error handling utility
+const handleError = (error, context) => {
+  console.error(`Error in ${context}:`, error)
+  showNotification(`An error occurred: ${error.message}`, "error")
+}
+
+// Mobile Navigation with improved accessibility
 function showMenu() {
-  navMenu.classList.add("show-menu")
-  document.body.style.overflow = "hidden"
+  try {
+    navMenu.classList.add("show-menu")
+    document.body.style.overflow = "hidden"
+    navToggle.setAttribute("aria-expanded", "true")
+  } catch (error) {
+    handleError(error, "showMenu")
+  }
 }
 
 function hideMenu() {
-  navMenu.classList.remove("show-menu")
-  document.body.style.overflow = "auto"
-}
-
-// Event Listeners for Mobile Menu
-if (navToggle) {
-  navToggle.addEventListener("click", showMenu)
-}
-
-if (navClose) {
-  navClose.addEventListener("click", hideMenu)
-}
-
-// Close menu when clicking on nav links
-navLinks.forEach((link) => {
-  link.addEventListener("click", hideMenu)
-})
-
-// Close menu when clicking outside
-document.addEventListener("click", (e) => {
-  if (!navMenu.contains(e.target) && !navToggle.contains(e.target)) {
-    hideMenu()
+  try {
+    navMenu.classList.remove("show-menu")
+    document.body.style.overflow = "auto"
+    navToggle.setAttribute("aria-expanded", "false")
+  } catch (error) {
+    handleError(error, "hideMenu")
   }
-})
+}
 
-// Active Link Highlighting
-function highlightActiveLink() {
-  const scrollY = window.pageYOffset
+// Event Listeners for Mobile Menu with cleanup
+function setupMobileMenu() {
+  if (navToggle) {
+    navToggle.addEventListener("click", showMenu)
+  }
 
-  sections.forEach((section) => {
-    const sectionHeight = section.offsetHeight
-    const sectionTop = section.offsetTop - 100
-    const sectionId = section.getAttribute("id")
-    const correspondingLink = document.querySelector(`.nav__link[href*=${sectionId}]`)
+  if (navClose) {
+    navClose.addEventListener("click", hideMenu)
+  }
 
-    if (scrollY > sectionTop && scrollY <= sectionTop + sectionHeight) {
-      correspondingLink?.classList.add("active-link")
-    } else {
-      correspondingLink?.classList.remove("active-link")
+  // Close menu when clicking on nav links
+  navLinks.forEach((link) => {
+    link.addEventListener("click", hideMenu)
+  })
+
+  // Close menu when clicking outside
+  document.addEventListener("click", (e) => {
+    if (!navMenu.contains(e.target) && !navToggle.contains(e.target)) {
+      hideMenu()
+    }
+  })
+
+  // Close menu on escape key
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") {
+      hideMenu()
     }
   })
 }
 
-// Scroll to Top Button
-function toggleScrollTopButton() {
-  if (window.scrollY >= 400) {
-    scrollTopBtn.classList.add("show")
-  } else {
-    scrollTopBtn.classList.remove("show")
+// Active Link Highlighting with performance optimization
+function highlightActiveLink() {
+  try {
+    const scrollY = window.pageYOffset
+    const headerHeight = document.querySelector(".header")?.offsetHeight || 0
+
+    sections.forEach((section) => {
+      const sectionHeight = section.offsetHeight
+      const sectionTop = section.offsetTop - headerHeight - 100
+      const sectionId = section.getAttribute("id")
+      const correspondingLink = document.querySelector(`.nav__link[href*=${sectionId}]`)
+
+      if (scrollY > sectionTop && scrollY <= sectionTop + sectionHeight) {
+        correspondingLink?.classList.add("active-link")
+      } else {
+        correspondingLink?.classList.remove("active-link")
+      }
+    })
+  } catch (error) {
+    handleError(error, "highlightActiveLink")
   }
 }
 
-// Smooth Scroll for Navigation Links
+// Scroll to Top Button with improved performance
+function toggleScrollTopButton() {
+  try {
+    if (window.scrollY >= 400) {
+      scrollTopBtn?.classList.add("show")
+    } else {
+      scrollTopBtn?.classList.remove("show")
+    }
+  } catch (error) {
+    handleError(error, "toggleScrollTopButton")
+  }
+}
+
+// Smooth Scroll with improved error handling
 function smoothScroll() {
-  navLinks.forEach((link) => {
-    link.addEventListener("click", (e) => {
-      e.preventDefault()
-      const targetId = link.getAttribute("href")
-      const targetSection = document.querySelector(targetId)
+  try {
+    navLinks.forEach((link) => {
+      link.addEventListener("click", (e) => {
+        e.preventDefault()
+        const targetId = link.getAttribute("href")
+        const targetSection = document.querySelector(targetId)
 
-      if (targetSection) {
-        const headerHeight = document.querySelector(".header").offsetHeight
-        const targetPosition = targetSection.offsetTop - headerHeight
+        if (targetSection) {
+          const headerHeight = document.querySelector(".header")?.offsetHeight || 0
+          const targetPosition = targetSection.offsetTop - headerHeight
 
-        window.scrollTo({
-          top: targetPosition,
-          behavior: "smooth",
-        })
-      }
+          window.scrollTo({
+            top: targetPosition,
+            behavior: "smooth",
+          })
+        }
+      })
     })
-  })
+  } catch (error) {
+    handleError(error, "smoothScroll")
+  }
 }
 
 // Scroll to Top Functionality
-if (scrollTopBtn) {
-  scrollTopBtn.addEventListener("click", () => {
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
+function setupScrollTop() {
+  if (scrollTopBtn) {
+    scrollTopBtn.addEventListener("click", () => {
+      try {
+        window.scrollTo({
+          top: 0,
+          behavior: "smooth",
+        })
+      } catch (error) {
+        handleError(error, "scrollToTop")
+      }
     })
-  })
+  }
 }
 
-// Animated Counter for Statistics
+// Animated Counter with improved performance
 function animateCounters() {
-  const observerOptions = {
-    threshold: 0.7,
-    rootMargin: "0px 0px -100px 0px",
-  }
+  try {
+    const observerOptions = {
+      threshold: 0.7,
+      rootMargin: "0px 0px -100px 0px",
+    }
 
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach((entry) => {
-      if (entry.isIntersecting) {
-        const counter = entry.target
-        const target = Number.parseInt(counter.getAttribute("data-target"))
-        const increment = target / 100
-        let current = 0
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          const counter = entry.target
+          const target = Number.parseInt(counter.getAttribute("data-target"))
+          const duration = 2000 // 2 seconds
+          const startTime = performance.now()
+          const startValue = 0
 
-        const updateCounter = () => {
-          if (current < target) {
-            current += increment
-            counter.textContent = Math.ceil(current)
-            setTimeout(updateCounter, 20)
-          } else {
-            counter.textContent = target
+          function updateCounter(currentTime) {
+            const elapsedTime = currentTime - startTime
+            const progress = Math.min(elapsedTime / duration, 1)
+            const currentValue = Math.floor(progress * (target - startValue) + startValue)
+            
+            counter.textContent = currentValue.toLocaleString()
+
+            if (progress < 1) {
+              requestAnimationFrame(updateCounter)
+            } else {
+              counter.textContent = target.toLocaleString()
+            }
           }
+
+          requestAnimationFrame(updateCounter)
+          observer.unobserve(counter)
         }
+      })
+    }, observerOptions)
 
-        updateCounter()
-        observer.unobserve(counter)
-      }
+    statNumbers.forEach((counter) => {
+      observer.observe(counter)
     })
-  }, observerOptions)
-
-  statNumbers.forEach((counter) => {
-    observer.observe(counter)
-  })
+  } catch (error) {
+    handleError(error, "animateCounters")
+  }
 }
 
-// Fade In Animation on Scroll
+// Fade In Animation with improved performance
 function fadeInOnScroll() {
-  const fadeElements = document.querySelectorAll(".service__card, .contact__item")
+  try {
+    const fadeElements = document.querySelectorAll(".service__card, .contact__item")
+    const observerOptions = {
+      threshold: 0.1,
+      rootMargin: "0px 0px -50px 0px",
+    }
 
-  const observerOptions = {
-    threshold: 0.1,
-    rootMargin: "0px 0px -50px 0px",
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("fade-in", "show")
+          observer.unobserve(entry.target)
+        }
+      })
+    }, observerOptions)
+
+    fadeElements.forEach((element) => {
+      element.classList.add("fade-in")
+      observer.observe(element)
+    })
+  } catch (error) {
+    handleError(error, "fadeInOnScroll")
+  }
+}
+
+// Contact Form Handling with improved validation and error handling
+function handleContactForm() {
+  if (!contactForm) return
+
+  const validateForm = (formData) => {
+    const errors = []
+    const email = formData.get("email")
+    const message = formData.get("message")
+
+    if (!email || !email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
+      errors.push("Please enter a valid email address")
+    }
+
+    if (!message || message.length < 10) {
+      errors.push("Message must be at least 10 characters long")
+    }
+
+    return errors
   }
 
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach((entry) => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add("fade-in", "show")
-      }
-    })
-  }, observerOptions)
+  contactForm.addEventListener("submit", async (e) => {
+    e.preventDefault()
 
-  fadeElements.forEach((element) => {
-    element.classList.add("fade-in")
-    observer.observe(element)
-  })
-}
-
-// Contact Form Handling
-function handleContactForm() {
-  if (contactForm) {
-    contactForm.addEventListener("submit", (e) => {
-      e.preventDefault()
-
-      // Get form data
+    try {
       const formData = new FormData(contactForm)
-      const formObject = {}
-      formData.forEach((value, key) => {
-        formObject[key] = value
-      })
+      const errors = validateForm(formData)
 
-      // Show loading state
+      if (errors.length > 0) {
+        errors.forEach(error => showNotification(error, "error"))
+        return
+      }
+
       const submitBtn = contactForm.querySelector('button[type="submit"]')
       const originalText = submitBtn.textContent
-      submitBtn.textContent = "Sending..."
+      
+      // Show loading state
+      submitBtn.classList.add("btn--loading")
       submitBtn.disabled = true
 
-      // Simulate form submission (replace with actual form handling)
-      setTimeout(() => {
-        // Show success message
-        showNotification("Message sent successfully! We'll get back to you soon.", "success")
+      // Simulate form submission (replace with actual API call)
+      await new Promise(resolve => setTimeout(resolve, 2000))
 
-        // Reset form
-        contactForm.reset()
+      showNotification("Message sent successfully! We'll get back to you soon.", "success")
+      contactForm.reset()
 
-        // Reset button
-        submitBtn.textContent = originalText
-        submitBtn.disabled = false
-      }, 2000)
-    })
-  }
+      // Reset button
+      submitBtn.classList.remove("btn--loading")
+      submitBtn.textContent = originalText
+      submitBtn.disabled = false
+    } catch (error) {
+      handleError(error, "contactForm")
+      showNotification("Failed to send message. Please try again.", "error")
+    }
+  })
 }
 
-// Notification System
+// Notification System with improved accessibility
 function showNotification(message, type = "info") {
-  // Remove existing notifications
-  const existingNotification = document.querySelector(".notification")
-  if (existingNotification) {
-    existingNotification.remove()
-  }
+  try {
+    // Remove existing notifications
+    const existingNotification = document.querySelector(".notification")
+    if (existingNotification) {
+      existingNotification.remove()
+    }
 
-  // Create notification element
-  const notification = document.createElement("div")
-  notification.className = `notification notification--${type}`
-  notification.innerHTML = `
-        <div class="notification__content">
-            <span class="notification__message">${message}</span>
-            <button class="notification__close">&times;</button>
-        </div>
+    // Create notification element
+    const notification = document.createElement("div")
+    notification.className = `notification notification--${type}`
+    notification.setAttribute("role", "alert")
+    notification.setAttribute("aria-live", "polite")
+    
+    notification.innerHTML = `
+      <div class="notification__content">
+        <span class="notification__message">${message}</span>
+        <button class="notification__close" aria-label="Close notification">&times;</button>
+      </div>
     `
 
-  // Add styles
-  notification.style.cssText = `
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        background: ${type === "success" ? "#10b981" : type === "error" ? "#ef4444" : "#3b82f6"};
-        color: white;
-        padding: 1rem 1.5rem;
-        border-radius: 0.5rem;
-        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-        z-index: 10000;
-        transform: translateX(100%);
-        transition: transform 0.3s ease;
-        max-width: 400px;
+    // Add styles
+    notification.style.cssText = `
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: ${type === "success" ? "var(--success-color)" : 
+                   type === "error" ? "var(--error-color)" : 
+                   "var(--primary-color)"};
+      color: white;
+      padding: 1rem 1.5rem;
+      border-radius: 0.5rem;
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+      z-index: 10000;
+      transform: translateX(100%);
+      transition: transform 0.3s ease;
+      max-width: 400px;
     `
 
-  // Add to DOM
-  document.body.appendChild(notification)
+    // Add to DOM
+    document.body.appendChild(notification)
 
-  // Animate in
-  setTimeout(() => {
-    notification.style.transform = "translateX(0)"
-  }, 100)
+    // Animate in
+    requestAnimationFrame(() => {
+      notification.style.transform = "translateX(0)"
+    })
 
-  // Close functionality
-  const closeBtn = notification.querySelector(".notification__close")
-  closeBtn.addEventListener("click", () => {
-    notification.style.transform = "translateX(100%)"
-    setTimeout(() => notification.remove(), 300)
-  })
-
-  // Auto remove after 5 seconds
-  setTimeout(() => {
-    if (notification.parentNode) {
+    // Close functionality
+    const closeBtn = notification.querySelector(".notification__close")
+    closeBtn.addEventListener("click", () => {
       notification.style.transform = "translateX(100%)"
       setTimeout(() => notification.remove(), 300)
-    }
-  }, 5000)
-}
+    })
 
-// Header Background on Scroll
-function updateHeaderBackground() {
-  const header = document.querySelector(".header")
-  if (window.scrollY > 100) {
-    header.style.backgroundColor = "rgba(255, 255, 255, 0.98)"
-    header.style.boxShadow = "0 2px 20px rgba(0, 0, 0, 0.1)"
-  } else {
-    header.style.backgroundColor = "rgba(255, 255, 255, 0.95)"
-    header.style.boxShadow = "none"
+    // Auto remove after 5 seconds
+    setTimeout(() => {
+      if (notification.parentNode) {
+        notification.style.transform = "translateX(100%)"
+        setTimeout(() => notification.remove(), 300)
+      }
+    }, 5000)
+  } catch (error) {
+    handleError(error, "showNotification")
   }
 }
 
-// Parallax Effect for Hero Section
-function parallaxEffect() {
-  const heroBlob = document.querySelector(".hero__blob")
-  if (heroBlob) {
-    const scrolled = window.pageYOffset
-    const rate = scrolled * -0.5
-    heroBlob.style.transform = `translateY(${rate}px)`
-  }
-}
-
-// Keyboard Navigation
-function handleKeyboardNavigation() {
-  document.addEventListener("keydown", (e) => {
-    // ESC key to close mobile menu
-    if (e.key === "Escape" && navMenu.classList.contains("show-menu")) {
-      hideMenu()
-    }
-
-    // Enter key on scroll-to-top button
-    if (e.key === "Enter" && document.activeElement === scrollTopBtn) {
-      scrollTopBtn.click()
-    }
-  })
-}
-
-// Performance Optimization - Throttle Scroll Events
-function throttle(func, wait) {
+// Performance optimized scroll handlers
+const debounce = (func, wait) => {
   let timeout
   return function executedFunction(...args) {
     const later = () => {
@@ -300,46 +350,35 @@ function throttle(func, wait) {
   }
 }
 
-// Scroll Event Listener with Throttling
-const throttledScrollHandler = throttle(() => {
-  highlightActiveLink()
-  toggleScrollTopButton()
-  updateHeaderBackground()
-  parallaxEffect()
-}, 16) // ~60fps
-
-// Initialize Everything
+// Initialize all functionality
 function init() {
-  // Set up smooth scrolling
-  smoothScroll()
+  try {
+    setupMobileMenu()
+    setupScrollTop()
+    smoothScroll()
+    animateCounters()
+    fadeInOnScroll()
+    handleContactForm()
 
-  // Initialize animations
-  animateCounters()
-  fadeInOnScroll()
+    // Add scroll event listeners with debounce
+    window.addEventListener("scroll", debounce(() => {
+      toggleScrollTopButton()
+      highlightActiveLink()
+    }, 100))
 
-  // Set up form handling
-  handleContactForm()
-
-  // Set up keyboard navigation
-  handleKeyboardNavigation()
-
-  // Add scroll event listener
-  window.addEventListener("scroll", throttledScrollHandler)
-
-  // Initial calls
-  highlightActiveLink()
-  toggleScrollTopButton()
-  updateHeaderBackground()
-
-  console.log("🚀 WebCraft Studio website initialized successfully!")
+    // Add keyboard navigation
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") {
+        hideMenu()
+      }
+    })
+  } catch (error) {
+    handleError(error, "init")
+  }
 }
 
-// Wait for DOM to be fully loaded
-if (document.readyState === "loading") {
-  document.addEventListener("DOMContentLoaded", init)
-} else {
-  init()
-}
+// Start the application
+document.addEventListener("DOMContentLoaded", init)
 
 // Handle page visibility changes
 document.addEventListener("visibilitychange", () => {

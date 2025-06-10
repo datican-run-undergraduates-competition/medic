@@ -3,6 +3,39 @@
 let currentTool = null
 let uploadedFile = null
 let analysisResult = null
+let videoStream = null
+let analysisInterval = null
+let socket = null
+let isAnalyzing = false
+
+// Initialize Socket.IO
+function initSocket() {
+    socket = io();
+    
+    socket.on('connect', () => {
+        console.log('Connected to server');
+        window.MedAI.showNotification('Connected to analysis server', 'success');
+    });
+    
+    socket.on('disconnect', () => {
+        console.log('Disconnected from server');
+        window.MedAI.showNotification('Disconnected from server', 'error');
+    });
+    
+    socket.on('error', (data) => {
+        console.error('Server error:', data.message);
+        window.MedAI.showNotification(data.message, 'error');
+        stopAnalysis();
+    });
+    
+    socket.on('analysis_result', (result) => {
+        updateAnalysisUI(result);
+    });
+    
+    socket.on('analysis_status', (status) => {
+        updateAnalysisStatus(status);
+    });
+}
 
 // Tool configurations
 const toolsConfig = {
@@ -120,6 +153,16 @@ const toolsConfig = {
     fileTypes: ["audio/wav", "audio/mp3"],
     acceptAttribute: "audio/*",
   },
+  handeye: {
+    id: "handeye",
+    title: "Hand-Eye Coordination",
+    description: "Test and improve hand-eye coordination through interactive game",
+    icon: "🎯",
+    fileTypes: ["video/mp4", "video/webm"],
+    acceptAttribute: "video/*",
+    analysisType: "real-time",
+    requiresCamera: true
+  }
 }
 
 // DOM Elements
@@ -137,9 +180,14 @@ const processingSection = document.getElementById("processing-section")
 const resultsSection = document.getElementById("results-section")
 const newAnalysisBtn = document.getElementById("new-analysis-btn")
 const downloadReportBtn = document.getElementById("download-report-btn")
+const cameraSection = document.getElementById("camera-section")
+const analysisSection = document.getElementById("analysis-section")
+const startCameraBtn = document.getElementById("start-camera-btn")
+const saveResultsBtn = document.getElementById("save-results")
 
 // Initialize tools functionality
 function initTools() {
+  initSocket()
   setupEventListeners()
   console.log("Health Analysis Tools initialized")
 }
@@ -187,6 +235,15 @@ function setupEventListeners() {
   if (downloadReportBtn) {
     downloadReportBtn.addEventListener("click", downloadReport)
   }
+
+  // Camera controls
+  if (startCameraBtn) {
+    startCameraBtn.addEventListener("click", startCamera)
+  }
+
+  if (saveResultsBtn) {
+    saveResultsBtn.addEventListener("click", saveResults)
+  }
 }
 
 // Open specific tool
@@ -212,6 +269,11 @@ function openTool(toolId) {
   // Show tool interface
   toolsDashboard.style.display = "none"
   toolInterface.style.display = "block"
+
+  // Show camera section if tool requires camera
+  if (currentTool.requiresCamera) {
+    cameraSection.style.display = "block"
+  }
 
   // Reset state
   resetToolState()
@@ -285,6 +347,7 @@ function downloadNotebook(notebookPath) {
 
 // Close tool and return to dashboard
 function closeTool() {
+  stopAnalysis()
   toolsDashboard.style.display = "block"
   toolInterface.style.display = "none"
   currentTool = null
@@ -293,6 +356,7 @@ function closeTool() {
 
 // Reset tool state
 function resetToolState() {
+  stopAnalysis()
   uploadedFile = null
   analysisResult = null
 
@@ -304,6 +368,16 @@ function resetToolState() {
   // Reset file preview
   filePreview.style.display = "none"
   fileInput.value = ""
+
+  // Remove video preview if exists
+  const previewContainer = document.querySelector('.video-preview')
+  if (previewContainer) {
+    previewContainer.remove()
+  }
+
+  // Reset camera section
+  cameraSection.style.display = "none"
+  analysisSection.style.display = "none"
 }
 
 // Handle drag over
@@ -379,189 +453,139 @@ function formatFileSize(bytes) {
 
 // Start analysis
 function startAnalysis() {
-  if (!uploadedFile || !currentTool) return
-
-  // Hide upload section, show processing
-  uploadSection.style.display = "none"
-  processingSection.style.display = "block"
-
-  // Simulate analysis progress
-  simulateAnalysis()
+  if (!currentTool || !videoStream) return
+  
+  isAnalyzing = true
+  
+  // Notify server
+  socket.emit('start_analysis', { tool_id: currentTool.id })
+  
+  // Start sending frames
+  const videoElement = document.getElementById("analysis-video")
+  const canvas = document.getElementById("analysis-canvas")
+  const context = canvas.getContext("2d")
+  
+  // Set canvas size
+  canvas.width = videoElement.videoWidth
+  canvas.height = videoElement.videoHeight
+  
+  // Start analysis loop
+  analysisInterval = setInterval(() => {
+    if (!isAnalyzing) return
+    
+    // Draw frame to canvas
+    context.drawImage(videoElement, 0, 0, canvas.width, canvas.height)
+    
+    // Send frame to server
+    socket.emit('frame', {
+      frame: canvas.toDataURL('image/jpeg', 0.8)
+    })
+  }, 100) // Send frame every 100ms
 }
 
-// Simulate analysis process
-function simulateAnalysis() {
-  const progressFill = document.getElementById("progress-fill")
-  let progress = 0
-
-  const updateProgress = () => {
-    progress += Math.random() * 15
-    if (progress > 100) progress = 100
-
-    progressFill.style.width = progress + "%"
-
-    if (progress < 100) {
-      setTimeout(updateProgress, 200 + Math.random() * 300)
-    } else {
-      setTimeout(showResults, 500)
-    }
+// Stop analysis
+function stopAnalysis() {
+  isAnalyzing = false
+  
+  if (analysisInterval) {
+    clearInterval(analysisInterval)
+    analysisInterval = null
   }
-
-  updateProgress()
-}
-
-// Show analysis results
-function showResults() {
-  analysisResult = generateAnalysisResult()
-
-  // Hide processing, show results
-  processingSection.style.display = "none"
-  resultsSection.style.display = "block"
-
-  // Populate results
-  populateResults(analysisResult)
-}
-
-// Generate mock analysis results
-function generateAnalysisResult() {
-  const findings = {
-    posture: [
-      "Mild forward head posture detected",
-      "Slight right shoulder elevation observed",
-      "Normal spinal curvature maintained",
-      "Recommended postural correction exercises",
-    ],
-    stroke: [
-      "Normal hand-eye coordination observed",
-      "Slight tremor detected in left hand",
-      "Reaction time within normal range",
-      "Motor function appears stable",
-    ],
-    skin: [
-      "No suspicious lesions detected",
-      "Mild inflammation in analyzed area",
-      "Skin texture appears normal",
-      "Recommend dermatologist consultation for follow-up",
-    ],
-    gait: [
-      "Stable gait pattern observed",
-      "Slight favoring of right leg detected",
-      "Normal stride length maintained",
-      "Balance appears adequate",
-    ],
-    respiratory: [
-      "Regular breathing pattern detected",
-      "Slight wheeze noted during inspiration",
-      "Respiratory rate: 16 breaths per minute",
-      "Lung sounds appear clear",
-    ],
-    cardiac: [
-      "Regular heart rhythm detected",
-      "Heart rate: 72 beats per minute",
-      "No arrhythmias detected",
-      "Heart rate variability within normal range",
-    ],
-  }
-
-  const recommendations = {
-    posture: [
-      "Consider ergonomic workplace assessment",
-      "Recommend physical therapy consultation",
-      "Implement daily posture exercises",
-      "Monitor for progression over time",
-    ],
-    stroke: [
-      "Continue current rehabilitation therapy",
-      "Consider occupational therapy evaluation",
-      "Schedule follow-up in 3 months",
-      "Monitor for any changes in symptoms",
-    ],
-    skin: [
-      "Apply moisturizer daily to affected area",
-      "Avoid prolonged sun exposure",
-      "Schedule dermatology appointment",
-      "Monitor for any changes in appearance",
-    ],
-    gait: [
-      "Consider physical therapy evaluation",
-      "Use assistive device if needed",
-      "Monitor for changes in mobility",
-      "Implement balance training exercises",
-    ],
-    respiratory: [
-      "Consider pulmonary function testing",
-      "Monitor symptoms closely",
-      "Avoid known respiratory triggers",
-      "Follow up with pulmonologist if symptoms persist",
-    ],
-    cardiac: [
-      "Continue current cardiac medications",
-      "Maintain regular exercise routine",
-      "Monitor blood pressure regularly",
-      "Schedule routine cardiac follow-up",
-    ],
-  }
-
-  return {
-    confidence: Math.floor(Math.random() * 15) + 85, // 85-99%
-    findings: findings[currentTool.id] || ["Analysis completed successfully"],
-    recommendations: recommendations[currentTool.id] || ["Follow standard medical protocols"],
+  
+  if (videoStream) {
+    videoStream.getTracks().forEach(track => track.stop())
+    videoStream = null
   }
 }
 
-// Populate results in the UI
-function populateResults(result) {
+// Update analysis UI
+function updateAnalysisUI(result) {
   const findingsList = document.getElementById("findings-list")
   const recommendationsList = document.getElementById("recommendations-list")
   const confidenceValue = document.getElementById("confidence-value")
-
-  // Clear existing content
+  
+  // Clear previous results
   findingsList.innerHTML = ""
   recommendationsList.innerHTML = ""
-
-  // Populate findings
-  result.findings.forEach((finding) => {
-    const li = document.createElement("li")
-    li.textContent = finding
-    findingsList.appendChild(li)
-  })
-
-  // Populate recommendations
-  result.recommendations.forEach((recommendation) => {
-    const li = document.createElement("li")
-    li.textContent = recommendation
-    recommendationsList.appendChild(li)
-  })
-
-  // Set confidence score
-  confidenceValue.textContent = result.confidence + "%"
+  
+  // Add findings
+  if (result.findings) {
+    result.findings.forEach(finding => {
+      const li = document.createElement("li")
+      li.textContent = finding
+      findingsList.appendChild(li)
+    })
+  }
+  
+  // Add recommendations
+  if (result.recommendations) {
+    result.recommendations.forEach(recommendation => {
+      const li = document.createElement("li")
+      li.textContent = recommendation
+      recommendationsList.appendChild(li)
+    })
+  }
+  
+  // Update confidence score
+  if (result.confidence) {
+    confidenceValue.textContent = result.confidence + "%"
+  }
 }
 
-// Reset tool for new analysis
-function resetTool() {
-  resetToolState()
-  window.MedAI.showNotification("Ready for new analysis", "success")
+// Update analysis status
+function updateAnalysisStatus(status) {
+  if (status.status === 'completed') {
+    stopAnalysis()
+    showResults()
+  }
 }
 
-// Download report (placeholder)
+// Show results
+function showResults() {
+  analysisSection.style.display = "none"
+  resultsSection.style.display = "block"
+}
+
+// Save results
+function saveResults() {
+  if (!analysisResult) return
+  
+  // Create results object
+  const results = {
+    tool: currentTool.id,
+    timestamp: new Date().toISOString(),
+    findings: analysisResult.findings,
+    recommendations: analysisResult.recommendations,
+    confidence: analysisResult.confidence
+  }
+  
+  // Save to localStorage
+  const savedResults = JSON.parse(localStorage.getItem('analysisResults') || '[]')
+  savedResults.push(results)
+  localStorage.setItem('analysisResults', JSON.stringify(savedResults))
+  
+  window.MedAI.showNotification("Results saved successfully", "success")
+}
+
+// Download report
 function downloadReport() {
   if (!analysisResult || !currentTool) return
-
-  // Create a simple text report
+  
+  // Create report content
   const report = `
 MedAI Pro - ${currentTool.title} Report
 Generated: ${new Date().toLocaleString()}
 Confidence Score: ${analysisResult.confidence}%
 
 Key Findings:
-${analysisResult.findings.map((finding) => `• ${finding}`).join("\n")}
+${analysisResult.findings.map(finding => `• ${finding}`).join("\n")}
 
 Recommendations:
-${analysisResult.recommendations.map((rec) => `• ${rec}`).join("\n")}
+${analysisResult.recommendations.map(rec => `• ${rec}`).join("\n")}
 
 Note: This report is generated by AI and should not replace professional medical consultation.
-    `
-
+  `
+  
   // Create and download file
   const blob = new Blob([report], { type: "text/plain" })
   const url = URL.createObjectURL(blob)
@@ -572,8 +596,35 @@ Note: This report is generated by AI and should not replace professional medical
   a.click()
   document.body.removeChild(a)
   URL.revokeObjectURL(url)
-
+  
   window.MedAI.showNotification("Report downloaded successfully", "success")
+}
+
+// Start camera
+async function startCamera() {
+  try {
+    videoStream = await navigator.mediaDevices.getUserMedia({ 
+      video: { 
+        width: { ideal: 1280 },
+        height: { ideal: 720 },
+        facingMode: "user"
+      } 
+    })
+    
+    const videoElement = document.getElementById("analysis-video")
+    videoElement.srcObject = videoStream
+    await videoElement.play()
+    
+    // Hide camera section, show analysis section
+    cameraSection.style.display = "none"
+    analysisSection.style.display = "block"
+    
+    // Start analysis
+    startAnalysis()
+    
+  } catch (error) {
+    window.MedAI.showNotification("Error accessing camera: " + error.message, "error")
+  }
 }
 
 // Initialize when DOM is ready
